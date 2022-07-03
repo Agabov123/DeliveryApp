@@ -1,6 +1,7 @@
 require "menu"
 require "item"
 require "order"
+require "twilio"
 
 RSpec.describe "integration" do
     it "returns one item" do 
@@ -32,7 +33,7 @@ RSpec.describe "integration" do
         item2 = Item.new("B", 10)
         items = [item1, item2]
         menu.add_dishes(items)
-        expect(menu.get_index_at_name("A")).to eq o
+        expect(menu.get_index_at_name("A")).to eq 0
     end
     it "returns index at name" do
         menu = Menu.new
@@ -42,4 +43,17 @@ RSpec.describe "integration" do
         menu.add_dishes(items)
         expect(menu.get_index_at_name("C")).to eq -1
     end  
+    it "returns order" do
+        menu = Menu.new
+        item1 = Item.new("A", 10)
+        item2 = Item.new("B", 10)
+        items = [item1, item2]
+        menu.add_dishes(items)
+        order = Order.new(menu)
+        order.add_dish_by_name("A")
+        expect(order.basket).to eq ["A"]
+        twilio = Message.new 
+        twilio.send_message
+    end 
+
 end 
